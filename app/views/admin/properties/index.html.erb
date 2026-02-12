@@ -1,0 +1,167 @@
+<div class="min-h-screen bg-gray-900">
+  <div class="px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header com título e botão -->
+    <div class="sm:flex sm:items-center sm:justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-white">Gerenciar Imóveis</h1>
+        <p class="mt-2 text-sm text-gray-400">
+          <%= pluralize(@properties.count, 'imóvel', 'imóveis') %> cadastrado<%= @properties.count != 1 ? 's' : '' %>
+        </p>
+      </div>
+      <div class="mt-4 sm:mt-0">
+        <%= link_to new_admin_property_path, class: "inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" do %>
+          <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+          </svg>
+          Novo Imóvel
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Informações sobre destaques -->
+    <div class="mb-8 rounded-lg bg-yellow-900/20 border border-yellow-500/30 p-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-medium text-yellow-300">Imóveis em Destaque</h3>
+          <p class="text-sm text-yellow-400">
+            <%= Property.featured_count %> de 3 imóveis em destaque na página inicial
+          </p>
+        </div>
+        <div class="text-right">
+          <span class="text-lg font-bold text-yellow-300"><%= Property.featured_count %>/3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de imóveis -->
+    <div class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <% if @properties.any? %>
+            <div class="overflow-hidden shadow-sm ring-1 ring-white/10 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-700">
+                <thead class="bg-gray-800">
+                  <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6">Imagem</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Título</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Bairro</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Preço</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                      <span class="sr-only">Ações</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700 bg-gray-800">
+                  <% @properties.each do |property| %>
+                    <tr class="hover:bg-gray-700">
+                      <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+                        <div class="relative h-16 w-16 flex-shrink-0">
+                          <% if property.images.any? %>
+                            <%= image_tag property.images.first, 
+                                class: "h-16 w-16 rounded-lg object-cover ring-2 ring-gray-600" %>
+                          <% else %>
+                            <div class="h-16 w-16 rounded-lg bg-gray-600 flex items-center justify-center">
+                              <svg class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                              </svg>
+                            </div>
+                          <% end %>
+                          <% if property.featured? %>
+                            <div class="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                              ★
+                            </div>
+                          <% end %>
+                        </div>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                        <div class="font-medium text-white">
+                          <%= truncate(property.title, length: 30) %>
+                        </div>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                        <span class="inline-flex rounded-full bg-blue-100 px-2 text-xs font-semibold leading-5 text-blue-800">
+                          <%= property.neighborhood.name %>
+                        </span>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                        <span class="text-green-400 font-medium">
+                          R$ <%= number_with_delimiter(property.price, delimiter: '.') %>
+                        </span>
+                      </td>
+                      <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                        <% if property.featured? %>
+                          <span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+                            ★ Destaque
+                          </span>
+                        <% else %>
+                          <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+                            Normal
+                          </span>
+                        <% end %>
+                      </td>
+                      <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <div class="flex justify-end space-x-3">
+                          <%= link_to admin_property_path(property), 
+                              target: "_blank",
+                              class: "text-indigo-400 hover:text-indigo-300" do %>
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                              <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A11.8 11.8 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A11.8 11.8 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="sr-only">Ver imóvel</span>
+                          <% end %>
+                          
+                          <%= link_to edit_admin_property_path(property), 
+                              class: "text-yellow-400 hover:text-yellow-300" do %>
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                              <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                            </svg>
+                            <span class="sr-only">Editar imóvel</span>
+                          <% end %>
+                          
+                          <%= link_to "#", 
+                              data: { 
+                                controller: "confirm-delete",
+                                action: "click->confirm-delete#confirm",
+                                "confirm-delete-message-value": "Esta ação não terá como ser desfeita!",
+                                "confirm-delete-url-value": admin_property_path(property),
+                                "confirm-delete-method-value": "delete"
+                              },
+                              class: "text-red-400 hover:text-red-300" do %>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                            <span class="sr-only">Deletar imóvel</span>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <!-- Estado vazio -->
+            <div class="text-center py-12">
+              <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h16.5M4.5 3h15l-.75 18H5.25L4.5 3z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-semibold text-gray-300">Nenhum imóvel cadastrado</h3>
+              <p class="mt-1 text-sm text-gray-500">Comece criando seu primeiro imóvel.</p>
+              <div class="mt-6">
+                <%= link_to new_admin_property_path, class: "inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" do %>
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                  </svg>
+                  Cadastrar primeiro imóvel
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

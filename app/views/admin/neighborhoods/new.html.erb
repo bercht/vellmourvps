@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-gray-900">
+  <div class="px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 max-w-2xl mx-auto">
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-white">Novo Bairro</h1>
+          <p class="mt-2 text-sm text-gray-400">
+            Cadastre um novo bairro no sistema
+          </p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+          <%= link_to admin_neighborhoods_path, class: "inline-flex items-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600" do %>
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+            </svg>
+            Voltar
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="max-w-2xl mx-auto mt-16">
+      <div class="overflow-hidden shadow-sm ring-1 ring-white/10 sm:rounded-lg">
+        <div class="bg-gray-800 px-6 py-8">
+          <%= form_with model: [:admin, @neighborhood], local: true, class: "space-y-6" do |form| %>
+            
+            <!-- Exibição de erros -->
+            <% if @neighborhood.errors.any? %>
+              <div class="rounded-md bg-red-900/20 border border-red-500/30 p-4">
+                <div class="flex">
+                  <div class="shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-300">
+                      <%= pluralize(@neighborhood.errors.count, "erro") %> encontrado<%= @neighborhood.errors.count != 1 ? 's' : '' %>:
+                    </h3>
+                    <div class="mt-2 text-sm text-red-400">
+                      <ul class="list-disc space-y-1 pl-5">
+                        <% @neighborhood.errors.full_messages.each do |message| %>
+                          <li><%= message %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+            <!-- Campo Nome -->
+            <div class="space-y-2">
+              <%= form.label :name, "Nome do Bairro", class: "block text-sm font-medium text-white" %>
+              <%= form.text_field :name, 
+                  class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6",
+                  placeholder: "Digite o nome do bairro" %>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="flex items-center justify-end gap-x-3 pt-6 border-t border-gray-700">
+              <%= link_to admin_neighborhoods_path, 
+                  class: "rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600" do %>
+                Cancelar
+              <% end %>
+              
+              <%= form.submit "Criar Bairro", 
+                  class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="prose mx-auto my-16">
+  <h1 class="text-3xl font-bold text-center text-purple-600 mb-8">
+    Gerenciar Usuários
+  </h1>
+  
+  <div class="bg-white shadow rounded-lg p-6">
+    <table class="min-w-full">
+      <thead>
+        <tr class="border-b">
+          <th class="text-left py-2">ID</th>
+          <th class="text-left py-2">Email</th>
+          <th class="text-left py-2">Criado em</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr class="border-b">
+            <td class="py-2"><%= user.id %></td>
+            <td class="py-2"><%= user.email %></td>
+            <td class="py-2"><%= user.created_at.strftime("%d/%m/%Y") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <div class="mt-6">
+      <%= link_to "Voltar ao Dashboard", admin_root_path, 
+          class: "bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors" %>
+    </div>
+  </div>
+</div>

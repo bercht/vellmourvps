@@ -1,0 +1,281 @@
+<%# app/views/admin/dashboard/index.html.erb %>
+
+<div class="bg-gray-900 text-white min-h-screen">
+  <!-- Sidebar para desktop -->
+  <div class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
+    <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-black/10 px-6 ring-1 ring-white/5">
+      <!-- Logo -->
+      <div class="flex h-16 shrink-0 items-center">
+        <%= link_to admin_root_path, class: "flex items-center space-x-3" do %>
+          <%= image_tag "logo_vellmour_white.png", 
+              alt: "Vellmour Admin", 
+              class: "h-16 w-auto mt-6" %>
+          
+        <% end %>
+      </div>
+            
+      <!-- Navegação -->
+      <nav class="flex flex-1 flex-col">
+        <ul role="list" class="flex flex-1 flex-col gap-y-7">
+          <li>
+            <ul role="list" class="-mx-2 space-y-1">
+              <li>
+                <%= link_to admin_root_path, class: "group flex gap-x-3 rounded-md bg-gray-800 p-2 text-sm/6 font-semibold text-white" do %>
+                  <svg class="size-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                  </svg>
+                  Dashboard
+                <% end %>
+              </li>
+              
+              <li>
+                <%= link_to admin_properties_path, class: "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white" do %>
+                  <svg class="size-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                  </svg>
+                  Imóveis
+                <% end %>
+              </li>
+              
+              <li>
+                <%= link_to admin_neighborhoods_path, class: "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white" do %>
+                  <svg class="size-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  Bairros
+                <% end %>
+              </li>
+              
+              <li>
+                <%= link_to "#", class: "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white" do %>
+                  <svg class="size-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                  </svg>
+                  Usuários
+                <% end %>
+              </li>
+              
+              <li>
+                <%= link_to "#", class: "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-400 hover:bg-gray-800 hover:text-white" do %>
+                  <svg class="size-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                  Configurações
+                <% end %>
+              </li>
+            </ul>
+          </li>
+          
+          <!-- Perfil do usuário -->
+          <li class="-mx-6 mt-auto">
+            <div class="flex items-center gap-x-4 px-6 py-3 text-sm/6 font-semibold text-white">
+              <div class="size-8 rounded-full bg-indigo-500 flex items-center justify-center">
+                <span class="text-white font-medium text-sm">
+                  <%= current_user.email.first.upcase %>
+                </span>
+              </div>
+              <span class="sr-only">Seu perfil</span>
+              <div class="flex-1">
+                <div class="text-white text-sm truncate"><%= current_user.email %></div>
+                <%= button_to "Sair", destroy_user_session_path, 
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Tem certeza que deseja sair?" } },
+                  class: "text-xs text-gray-400 hover:text-white bg-transparent border-0 p-0 cursor-pointer" %>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="xl:pl-72">
+    <!-- Header sticky -->
+    <div class="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-gray-900 px-4 shadow-xs sm:px-6 lg:px-8">
+      <button type="button" class="-m-2.5 p-2.5 text-white xl:hidden">
+        <span class="sr-only">Abrir sidebar</span>
+        <svg class="size-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Zm0 5.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+        <div class="grid flex-1 grid-cols-1">
+          <h1 class="text-xl font-semibold text-white mt-4">Dashboard Administrativo</h1>
+        </div>
+        
+        <div class="flex items-center gap-x-4">
+          <%= link_to root_path, 
+              class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500",
+              target: "_blank" do %>
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            Ver Site
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <header>
+        <!-- Título e status -->
+        <div class="flex flex-col items-start justify-between gap-x-8 gap-y-4 bg-gray-700/10 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+          <div>
+            <div class="flex items-center gap-x-3">
+              <div class="flex-none rounded-full bg-green-400/10 p-1 text-green-400">
+                <div class="size-2 rounded-full bg-current"></div>
+              </div>
+              <h1 class="flex gap-x-3 text-base/7">
+                <span class="font-semibold text-white">Vellmour</span>
+                <span class="text-gray-600">/</span>
+                <span class="font-semibold text-white">Admin Dashboard</span>
+              </h1>
+            </div>
+            <p class="mt-2 text-xs/6 text-gray-400">Sistema de gerenciamento imobiliário</p>
+          </div>
+          <%= link_to root_path, target: "_blank" do %>
+            <div class="order-first flex-none rounded-full bg-indigo-400/10 px-4 py-2 text-sm font-medium text-indigo-400 ring-1 ring-indigo-400/30 ring-inset sm:order-0">
+              Ver site
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="grid grid-cols-1 bg-gray-700/10 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="border-t border-white/5 px-4 py-6 sm:px-6 lg:px-8">
+            <p class="text-sm/6 font-medium text-gray-400">Total de Imóveis</p>
+            <p class="mt-2 flex items-baseline gap-x-2">
+              <span class="text-4xl font-semibold tracking-tight text-white"><%= @total_properties %></span>
+            </p>
+          </div>
+          
+          <div class="border-t border-white/5 px-4 py-6 sm:border-l sm:px-6 lg:px-8">
+            <p class="text-sm/6 font-medium text-gray-400">Imóveis em Destaque</p>
+            <p class="mt-2 flex items-baseline gap-x-2">
+              <span class="text-4xl font-semibold tracking-tight text-white"><%= @featured_properties %></span>
+              <span class="text-sm text-gray-400">de 3</span>
+            </p>
+          </div>
+          
+          <div class="border-t border-white/5 px-4 py-6 sm:px-6 lg:border-l lg:px-8">
+            <p class="text-sm/6 font-medium text-gray-400">Bairros Cadastrados</p>
+            <p class="mt-2 flex items-baseline gap-x-2">
+              <span class="text-4xl font-semibold tracking-tight text-white"><%= @total_neighborhoods %></span>
+            </p>
+          </div>
+          
+          <div class="border-t border-white/5 px-4 py-6 sm:border-l sm:px-6 lg:px-8">
+            <p class="text-sm/6 font-medium text-gray-400">Usuários</p>
+            <p class="mt-2 flex items-baseline gap-x-2">
+              <span class="text-4xl font-semibold tracking-tight text-white"><%= @total_users %></span>
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Lista de atividades recentes -->
+      <div class="border-t border-white/10 pt-11">
+        <h2 class="px-4 text-base/7 font-semibold text-white sm:px-6 lg:px-8">Últimos Imóveis Cadastrados</h2>
+        
+        <% if @recent_properties.any? %>
+          <table class="mt-6 w-full text-left whitespace-nowrap">
+            <colgroup>
+              <col class="w-full sm:w-4/12" />
+              <col class="lg:w-4/12" />
+              <col class="lg:w-2/12" />
+              <col class="lg:w-1/12" />
+              <col class="lg:w-1/12" />
+            </colgroup>
+            <thead class="border-b border-white/10 text-sm/6 text-white">
+              <tr>
+                <th scope="col" class="py-2 pr-8 pl-4 font-semibold sm:pl-6 lg:pl-8">Imóvel</th>
+                <th scope="col" class="hidden py-2 pr-8 pl-0 font-semibold sm:table-cell">Bairro</th>
+                <th scope="col" class="py-2 pr-4 pl-0 text-right font-semibold sm:pr-8 sm:text-left lg:pr-20">Preço</th>
+                <th scope="col" class="hidden py-2 pr-8 pl-0 font-semibold md:table-cell lg:pr-20">Status</th>
+                <th scope="col" class="hidden py-2 pr-4 pl-0 text-right font-semibold sm:table-cell sm:pr-6 lg:pr-8">Cadastrado</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              <% @recent_properties.each do |property| %>
+                <tr>
+                  <td class="py-4 pr-8 pl-4 sm:pl-6 lg:pl-8">
+                    <div class="flex items-center gap-x-4">
+                      <div class="size-10 rounded-lg bg-gray-800 flex items-center justify-center overflow-hidden">
+                        <% if property.images.attached? %>
+                          <%= image_tag property.images.first, class: "size-10 object-cover" %>
+                        <% else %>
+                          <svg class="size-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                          </svg>
+                        <% end %>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <div class="truncate text-sm/6 font-medium text-white">
+                          <%= link_to property.title, admin_property_path(property), 
+                              class: "hover:text-indigo-400" %>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                          <%= property.property_type || "Não especificado" %>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  
+                  <td class="hidden py-4 pr-4 pl-0 sm:table-cell sm:pr-8">
+                    <div class="text-sm/6 text-gray-400">
+                      <%= property.neighborhood.name %>
+                    </div>
+                  </td>
+                  
+                  <td class="py-4 pr-4 pl-0 text-sm/6 sm:pr-8 lg:pr-20">
+                    <div class="text-white font-medium">
+                      <%= number_to_currency(property.price, unit: "R$ ", separator: ",", delimiter: ".") %>
+                    </div>
+                  </td>
+                  
+                  <td class="hidden py-4 pr-8 pl-0 text-sm/6 md:table-cell lg:pr-20">
+                    <div class="flex items-center gap-x-2">
+                      <% if property.featured? %>
+                        <div class="flex-none rounded-full bg-yellow-400/10 p-1 text-yellow-400">
+                          <div class="size-1.5 rounded-full bg-current"></div>
+                        </div>
+                        <div class="text-yellow-400">Destaque</div>
+                      <% else %>
+                        <div class="flex-none rounded-full bg-green-400/10 p-1 text-green-400">
+                          <div class="size-1.5 rounded-full bg-current"></div>
+                        </div>
+                        <div class="text-green-400">Ativo</div>
+                      <% end %>
+                    </div>
+                  </td>
+                  
+                  <td class="hidden py-4 pr-4 pl-0 text-right text-sm/6 text-gray-400 sm:table-cell sm:pr-6 lg:pr-8">
+                    <time datetime="<%= property.created_at.iso8601 %>">
+                      <%= time_ago_in_words(property.created_at) %> atrás
+                    </time>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <div class="mt-6 text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-300">Nenhum imóvel cadastrado</h3>
+            <p class="mt-1 text-sm text-gray-500">Comece cadastrando seu primeiro imóvel.</p>
+            <div class="mt-6">
+              <%= link_to "Cadastrar Imóvel", new_admin_property_path, 
+                  class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </main>
+  </div>
+</div>

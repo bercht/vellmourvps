@@ -1,0 +1,15 @@
+<% if notice %>
+  <div data-controller="sweetalert" 
+       data-sweetalert-message-value="<%= notice %>" 
+       data-sweetalert-type-value="success"
+       data-sweetalert-timer-value="4000">
+  </div>
+<% end %>
+
+<% if alert %>
+  <div data-controller="sweetalert" 
+       data-sweetalert-message-value="<%= alert %>" 
+       data-sweetalert-type-value="error"
+       data-sweetalert-timer-value="5000">
+  </div>
+<% end %>

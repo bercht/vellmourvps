@@ -1,0 +1,305 @@
+<%# app/views/shared/_search_form.html.erb %>
+
+<!-- Formulário de Busca Colapsível -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+  <!-- Header sempre visível -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-base/7 font-semibold text-gray-900">Encontre seu imóvel ideal</h2>
+      <p class="mt-1 text-sm/6 text-gray-600">Use os filtros abaixo para refinar sua busca</p>
+    </div>
+    
+    <!-- Botão para expandir/recolher -->
+    <button type="button" 
+            class="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onclick="toggleSearchForm()"
+            id="search-form-toggle">
+      <span id="toggle-text">Buscar Imóveis</span>
+      <svg class="w-4 h-4 transform transition-transform" id="search-form-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Indicador de filtros ativos (sempre visível se houver) -->
+  <% if @search_performed && params[:q].present? %>
+    <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <svg class="w-4 h-4 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="text-blue-800 text-sm">
+            <strong><%= @total_properties %></strong> 
+            <%= @total_properties == 1 ? 'imóvel encontrado' : 'imóveis encontrados' %>
+          </span>
+        </div>
+        <%= link_to "Limpar", properties_path, 
+            class: "text-sm text-blue-700 hover:text-blue-900 underline" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Formulário colapsível -->
+  <div id="search-form-content" class="hidden">
+    <%= search_form_for @q, url: properties_path, method: :get, local: true do |f| %>
+      <div class="border-t border-gray-900/10 pt-6 mt-6">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <!-- Busca por palavras-chave -->
+          <div class="col-span-full">
+            <label for="keywords" class="block text-sm/6 font-medium text-gray-900">
+              Buscar por palavras-chave
+            </label>
+            <div class="mt-2">
+              <%= text_field_tag :keywords, params[:keywords], 
+                  id: "keywords",
+                  placeholder: "Ex: vista mar, próximo ao shopping, reformado...", 
+                  class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" %>
+            </div>
+          </div>
+
+          <!-- Tipo de Imóvel -->
+          <div class="sm:col-span-3">
+            <label for="property_type" class="block text-sm/6 font-medium text-gray-900">
+              Tipo de Imóvel
+            </label>
+            <div class="mt-2 grid grid-cols-1">
+              <%= f.select :property_type_eq, 
+                  options_for_select([['Todos os tipos', '']] + @property_types.map { |type| [type, type] }, params.dig(:q, :property_type_eq)),
+                  {}, 
+                  { id: "property_type", class: "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" } %>
+              <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Bairro -->
+          <div class="sm:col-span-3">
+            <label for="neighborhood" class="block text-sm/6 font-medium text-gray-900">
+              Bairro
+            </label>
+            <div class="mt-2 grid grid-cols-1">
+              <%= f.select :neighborhood_id_eq, 
+                  options_for_select([['Todos os bairros', '']] + @neighborhoods.map { |n| [n.name, n.id] }, params.dig(:q, :neighborhood_id_eq)),
+                  {}, 
+                  { id: "neighborhood", class: "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" } %>
+              <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Quartos -->
+          <div class="sm:col-span-2">
+            <label for="bedrooms" class="block text-sm/6 font-medium text-gray-900">
+              Quartos
+            </label>
+            <div class="mt-2 grid grid-cols-1">
+              <%= f.select :bedrooms_eq, 
+                  options_for_select([
+                    ['Qualquer', ''],
+                    ['1 quarto', '1'],
+                    ['2 quartos', '2'], 
+                    ['3 quartos', '3'],
+                    ['4 quartos', '4'],
+                    ['5+ quartos', '5']
+                  ], params.dig(:q, :bedrooms_eq)),
+                  {},
+                  { id: "bedrooms", class: "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" } %>
+              <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Banheiros -->
+          <div class="sm:col-span-2">
+            <label for="bathrooms" class="block text-sm/6 font-medium text-gray-900">
+              Banheiros
+            </label>
+            <div class="mt-2 grid grid-cols-1">
+              <%= f.select :bathrooms_eq, 
+                  options_for_select([
+                    ['Qualquer', ''],
+                    ['1 banheiro', '1'],
+                    ['2 banheiros', '2'], 
+                    ['3 banheiros', '3'],
+                    ['4+ banheiros', '4']
+                  ], params.dig(:q, :bathrooms_eq)),
+                  {},
+                  { id: "bathrooms", class: "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" } %>
+              <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Botão de Busca Rápida -->
+          <div class="sm:col-span-2 flex items-end">
+            <%= f.submit "Buscar", class: "w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+          </div>
+        </div>
+
+        <!-- Filtros Avançados (Seção interna colapsível) -->
+        <div class="border-t border-gray-900/10 pt-6 mt-8">
+          <button type="button" 
+                  class="flex items-center justify-between w-full text-left text-sm/6 font-semibold text-gray-900 hover:text-indigo-600"
+                  onclick="toggleAdvancedFilters()"
+                  id="advanced-filters-toggle">
+            <span>Filtros Avançados</span>
+            <svg class="w-5 h-5 transform transition-transform" id="advanced-filters-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <div id="advanced-filters" class="hidden mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <!-- Faixa de Preço -->
+            <div class="sm:col-span-2">
+              <label for="price_min" class="block text-sm/6 font-medium text-gray-900">
+                Preço Mínimo
+              </label>
+              <div class="mt-2">
+                <%= f.number_field :price_gteq, 
+                    id: "price_min",
+                    placeholder: "Ex: 300.000", 
+                    class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" %>
+              </div>
+            </div>
+            
+            <div class="sm:col-span-2">
+              <label for="price_max" class="block text-sm/6 font-medium text-gray-900">
+                Preço Máximo  
+              </label>
+              <div class="mt-2">
+                <%= f.number_field :price_lteq, 
+                    id: "price_max",
+                    placeholder: "Ex: 800.000", 
+                    class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" %>
+              </div>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="area_min" class="block text-sm/6 font-medium text-gray-900">
+                Área Mínima (m²)
+              </label>
+              <div class="mt-2">
+                <%= f.number_field :area_m2_gteq, 
+                    id: "area_min",
+                    placeholder: "Ex: 80", 
+                    class: "block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" %>
+              </div>
+            </div>
+            
+            <!-- Vagas de Garagem -->
+            <div class="sm:col-span-2">
+              <label for="garage_spaces" class="block text-sm/6 font-medium text-gray-900">
+                Vagas de Garagem
+              </label>
+              <div class="mt-2 grid grid-cols-1">
+                <%= f.select :garage_spaces_gteq, 
+                    options_for_select([
+                      ['Qualquer', ''],
+                      ['1+ vaga', '1'],
+                      ['2+ vagas', '2'],
+                      ['3+ vagas', '3']
+                    ], params.dig(:q, :garage_spaces_gteq)),
+                    {},
+                    { id: "garage_spaces", class: "col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" } %>
+                <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Checkbox Mobilado -->
+            <div class="sm:col-span-4 flex items-center gap-3 pt-8">
+              <div class="flex h-6 shrink-0 items-center">
+                <div class="group grid size-4 grid-cols-1">
+                  <%= f.check_box :furnished_eq, 
+                      { checked: params.dig(:q, :furnished_eq) == '1', id: "furnished", class: "col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" }, 
+                      '1', '' %>
+                  <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
+                    <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-sm/6">
+                <label for="furnished" class="font-medium text-gray-900">Apenas imóveis mobilados</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+          <%= link_to "Limpar Filtros", properties_path, 
+              class: "text-sm/6 font-semibold text-gray-900 hover:text-indigo-600" %>
+          
+          <%= f.submit "Aplicar Filtros", 
+              class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+function toggleSearchForm() {
+  const content = document.getElementById('search-form-content');
+  const icon = document.getElementById('search-form-icon');
+  const toggleText = document.getElementById('toggle-text');
+  
+  if (content.classList.contains('hidden')) {
+    content.classList.remove('hidden');
+    icon.style.transform = 'rotate(180deg)';
+    toggleText.textContent = 'Ocultar Busca';
+  } else {
+    content.classList.add('hidden');
+    icon.style.transform = 'rotate(0deg)';
+    toggleText.textContent = 'Buscar Imóveis';
+  }
+}
+
+function toggleAdvancedFilters() {
+  const filters = document.getElementById('advanced-filters');
+  const icon = document.getElementById('advanced-filters-icon');
+  
+  if (filters.classList.contains('hidden')) {
+    filters.classList.remove('hidden');
+    icon.style.transform = 'rotate(180deg)';
+  } else {
+    filters.classList.add('hidden');
+    icon.style.transform = 'rotate(0deg)';
+  }
+}
+
+// Mostrar formulário automaticamente se houver busca ativa
+// Mostrar filtros avançados se algum filtro avançado estiver ativo
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  // Verificar se há parâmetros de busca
+  const hasSearchParams = urlParams.has('keywords') || 
+                         urlParams.has('q[property_type_eq]') ||
+                         urlParams.has('q[neighborhood_id_eq]') ||
+                         urlParams.has('q[bedrooms_eq]') ||
+                         urlParams.has('q[bathrooms_eq]');
+  
+  // Verificar filtros avançados
+  const advancedParams = ['price_gteq', 'price_lteq', 'area_m2_gteq', 'garage_spaces_gteq', 'furnished_eq'];
+  const hasAdvancedFilters = advancedParams.some(param => 
+    urlParams.get(`q[${param}]`) && urlParams.get(`q[${param}]`) !== ''
+  );
+  
+  // Abrir formulário se houver busca ativa
+  if (hasSearchParams || hasAdvancedFilters) {
+    toggleSearchForm();
+  }
+  
+  // Abrir filtros avançados se estiverem ativos
+  if (hasAdvancedFilters) {
+    toggleAdvancedFilters();
+  }
+});
+</script>

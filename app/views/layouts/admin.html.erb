@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vellmour Imóveis - Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "tailwind" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    
+    <!-- Spotlight.js CSS -->
+    <link rel="stylesheet" href="https://rawcdn.githack.com/nextapps-de/spotlight/0.7.8/dist/css/spotlight.min.css">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <%= javascript_importmap_tags %>
+
+    
+    <!-- Spotlight.js JavaScript -->
+    <script src="https://rawcdn.githack.com/nextapps-de/spotlight/0.7.8/dist/js/spotlight.min.js"></script>
+    
+  </head>
+
+  <body class="bg-gray-900 min-h-screen flex flex-col">
+    <!-- Flash Messages -->
+    <% if notice %>
+      <div data-controller="sweetalert" 
+           data-sweetalert-message-value="<%= notice %>" 
+           data-sweetalert-type-value="success">
+      </div>
+    <% end %>
+    
+    <% if alert %>
+      <div data-controller="sweetalert" 
+           data-sweetalert-message-value="<%= alert %>" 
+           data-sweetalert-type-value="error">
+      </div>
+    <% end %>
+    
+    
+    <!-- Navbar (renderizada condicionalmente - exceto home/index) -->
+    <%= render 'shared/admin_navbar' %>
+    
+    <%= render 'shared/flash_messages'%>
+
+    <!-- Main content -->
+    <main class="flex-grow">
+      <%= yield %>
+    </main>
+
+    <!-- Footer (apenas em páginas públicas) -->
+    
+    <%= render 'shared/admin_footer' %>
+    
+  </body>
+</html>

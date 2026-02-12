@@ -1,0 +1,294 @@
+<div class="min-h-screen bg-gray-900">
+  <div class="px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 max-w-4xl mx-auto">
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-white">Editar Imóvel</h1>
+          <p class="mt-2 text-sm text-gray-400">
+            Modifique as informações do imóvel <span class="font-medium text-white"><%= @property.title %></span>
+          </p>
+        </div>
+        <div class="mt-4 sm:mt-0 flex space-x-3">
+          <%= link_to admin_properties_path, class: "inline-flex items-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600" do %>
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+            </svg>
+            Voltar
+          <% end %>
+          <%= link_to property_path(@property), target: "_blank", class: "inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" do %>
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+              <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A11.8 11.8 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A11.8 11.8 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+            </svg>
+            Ver Imóvel
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="max-w-4xl mx-auto">
+      <div class="overflow-hidden shadow-sm ring-1 ring-white/10 sm:rounded-lg">
+        <div class="bg-gray-800 px-6 py-8">
+          <%= form_with model: [:admin, @property], local: true, data: { turbo: false }, class: "space-y-8" do |form| %>
+            
+            <!-- Exibição de erros -->
+            <% if @property.errors.any? %>
+              <div class="rounded-md bg-red-900/20 border border-red-500/30 p-4">
+                <div class="flex">
+                  <div class="shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-300">
+                      <%= pluralize(@property.errors.count, "erro") %> encontrado<%= @property.errors.count != 1 ? 's' : '' %>:
+                    </h3>
+                    <div class="mt-2 text-sm text-red-400">
+                      <ul class="list-disc space-y-1 pl-5">
+                        <% @property.errors.full_messages.each do |message| %>
+                          <li><%= message %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+            <!-- Grid de campos -->
+            <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+              
+              <!-- Título -->
+              <div class="col-span-full">
+                <%= form.label :title, "Título do Imóvel", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.text_field :title, 
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              </div>
+
+              <!-- Tipo de Propriedade -->
+              <div class="sm:col-span-3">
+                <%= form.label :property_type, "Tipo de Imóvel", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.select :property_type, 
+                      options_for_select([
+                        ['Selecione o tipo', ''],
+                        ['Casa', 'casa'],
+                        ['Apartamento', 'apartamento'],
+                        ['Cobertura', 'cobertura'],
+                        ['Casa de Condomínio', 'casa_condominio'],
+                        ['Loft', 'loft'],
+                        ['Studio', 'studio'],
+                        ['Kitnet', 'kitnet'],
+                        ['Sobrado', 'sobrado'],
+                        ['Chácara', 'chacara'],
+                        ['Terreno', 'terreno'],
+                        ['Comercial', 'comercial']
+                      ], @property.property_type),
+                      {}, 
+                      { class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
+                </div>
+              </div>
+
+              <!-- Mobiliado -->
+              <div class="sm:col-span-3">
+                <fieldset>
+                  <legend class="text-sm font-medium text-white">Mobiliado</legend>
+                  <div class="mt-4 space-y-4">
+                    <div class="flex items-center gap-x-3">
+                      <%= form.radio_button :furnished, true, class: "h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600" %>
+                      <%= form.label :furnished, "Sim, mobiliado", value: true, class: "block text-sm font-medium text-gray-300" %>
+                    </div>
+                    <div class="flex items-center gap-x-3">
+                      <%= form.radio_button :furnished, false, class: "h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600" %>
+                      <%= form.label :furnished, "Não mobiliado", value: false, class: "block text-sm font-medium text-gray-300" %>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+
+              <!-- Campo Featured -->
+              <div class="col-span-full">
+                <div class="rounded-lg bg-yellow-900/20 border border-yellow-500/30 px-4 py-4">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="block text-sm font-medium text-yellow-300">Imóvel em Destaque</label>
+                      <p class="mt-1 text-sm text-yellow-400">Imóveis em destaque aparecem na página inicial (máximo 3)</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                      <% if @property.can_be_featured? || @property.featured? %>
+                        <%= form.check_box :featured, class: "h-4 w-4 text-yellow-600 border-gray-300 rounded focus:ring-yellow-600" %>
+                        <% if @property.featured? %>
+                          <span class="text-sm text-yellow-300 font-medium">★ EM DESTAQUE</span>
+                        <% else %>
+                          <span class="text-sm text-green-400 font-medium">✓ Disponível (<%= 3 - Property.featured_count %> vagas)</span>
+                        <% end %>
+                      <% else %>
+                        <%= form.check_box :featured, disabled: true, class: "h-4 w-4 text-gray-400 border-gray-300 rounded" %>
+                        <span class="text-sm text-red-400 font-medium">✗ Limite atingido (3/3)</span>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preço e Área -->
+              <div class="sm:col-span-3">
+                <%= form.label :price, "Preço (R$)", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.number_field :price, 
+                      step: 0.01, min: 0,
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              </div>
+
+              <div class="sm:col-span-3">
+                <%= form.label :area_m2, "Área (m²)", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.number_field :area_m2, 
+                      step: 0.01, min: 0,
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              </div>
+
+              <!-- Quartos, Banheiros e Vagas -->
+              <div class="sm:col-span-2">
+                <%= form.label :bedrooms, "Quartos", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.number_field :bedrooms, 
+                      min: 0, max: 20,
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              </div>
+
+              <div class="sm:col-span-2">
+                <%= form.label :bathrooms, "Banheiros", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.number_field :bathrooms, 
+                      min: 0, max: 10,
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              </div>
+
+              <div class="sm:col-span-2">
+                <%= form.label :garage_spaces, "Vagas de Garagem", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.number_field :garage_spaces, 
+                      min: 0, max: 10,
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+              </div>
+
+              <!-- Bairro -->
+              <div class="col-span-full">
+                <%= form.label :neighborhood_id, "Bairro", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.select :neighborhood_id, 
+                      options_for_select(@neighborhoods.map { |n| [n.name, n.id] }, @property.neighborhood_id),
+                      {}, 
+                      { class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" } %>
+                </div>
+              </div>
+
+              <!-- Descrição -->
+              <div class="col-span-full">
+                <%= form.label :description, "Descrição", class: "block text-sm font-medium text-white" %>
+                <div class="mt-2">
+                  <%= form.text_area :description, 
+                      rows: 6,
+                      class: "block w-full rounded-md border-0 bg-gray-700 py-2 px-3 text-white shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                </div>
+                <p class="mt-2 text-sm text-gray-400">Descreva detalhadamente as características e diferenciais do imóvel.</p>
+              </div>
+
+              <!-- Imagens Atuais -->
+              <% if @property.images.any? %>
+                <div class="col-span-full">
+                  <div class="mb-4 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                    <h3 class="text-sm font-semibold text-blue-300 flex items-center mb-2">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      Imagens Atuais (<%= @property.images.count %>)
+                    </h3>
+                    <p class="text-sm text-blue-400 mb-4">
+                      As novas imagens abaixo serão <strong>adicionadas</strong> às existentes.
+                      <br>Para remover imagens, acesse a página individual do imóvel.
+                    </p>
+                  </div>
+                  
+                  <!-- Grid de Imagens Atuais -->
+                  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
+                    <% @property.images.each_with_index do |image, index| %>
+                      <div class="relative group">
+                        <div class="aspect-square w-full overflow-hidden rounded-lg bg-gray-600 shadow-sm border border-gray-500 group-hover:border-blue-400 transition-all duration-200">
+                          <%= image_tag image, class: "h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-200" %>
+                          <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-200"></div>
+                        </div>
+                        <div class="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center shadow-md z-10">
+                          <%= index + 1 %>
+                        </div>
+                        <div class="absolute bottom-2 right-2 px-2 py-1 bg-green-600 text-white text-xs font-medium rounded-full shadow-md">
+                          ✓ Salva
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+
+              <!-- Upload de Novas Imagens -->
+              <div class="col-span-full" data-controller="image-preview">
+                <%= form.label :images, "Adicionar Novas Imagens", class: "block text-sm font-medium text-white" %>
+                
+                <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-600 px-6 py-10 bg-gray-700/50">
+                  <div class="text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" />
+                    </svg>
+                    <div class="mt-4 flex text-sm text-gray-400">
+                      <label for="property_images_edit" class="relative cursor-pointer rounded-md font-semibold text-indigo-400 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-300">
+                        <span>Escolher arquivos</span>
+                        <%= form.file_field :images, 
+                            multiple: true, 
+                            accept: "image/*", 
+                            class: "sr-only", 
+                            id: "property_images_edit",
+                            data: { 
+                              image_preview_target: "input",
+                              action: "change->image-preview#preview" 
+                            } %>
+                      </label>
+                      <p class="pl-1">ou arraste e solte</p>
+                    </div>
+                    <p class="text-xs text-gray-500">
+                      <strong class="text-green-400">✓ Importante:</strong> As novas imagens serão <strong>ADICIONADAS</strong> às existentes.
+                      <br>PNG, JPG, GIF até 10MB cada
+                    </p>
+                  </div>
+                </div>
+
+                <div data-image-preview-target="preview" class="mt-4"></div>
+              </div>
+            </div>
+
+            <!-- Botões de ação -->
+            <div class="flex items-center justify-end gap-x-3 pt-6 border-t border-gray-700">
+              <%= link_to admin_properties_path, 
+                  class: "rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600" do %>
+                Cancelar
+              <% end %>
+              
+              <%= form.submit "Atualizar Imóvel", 
+                  class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

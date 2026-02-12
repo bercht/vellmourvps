@@ -1,0 +1,194 @@
+/* app/assets/stylesheets/stimulus_components.css */
+
+/* =========================
+   Alert Component Styles
+   ========================= */
+
+.alert-box {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+
+.alert-box.alert-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.alert-box.alert-hide {
+  opacity: 0;
+  transform: translateY(-1rem);
+}
+
+.alerts-container {
+  pointer-events: none;
+}
+
+.alerts-container .alert-box {
+  pointer-events: auto;
+}
+
+.alert-progress-bar {
+  transition: width 100ms linear;
+}
+
+/* Animação de entrada dos alertas */
+@keyframes alertSlideIn {
+  from {
+    transform: translateX(100%) translateY(-1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Variação para diferentes posições */
+.alerts-container.top-left .alert-box {
+  animation: alertSlideInLeft 0.3s ease-out;
+}
+
+@keyframes alertSlideInLeft {
+  from {
+    transform: translateX(-100%) translateY(-1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   Modal Component Styles
+   ========================= */
+
+/* Animações do modal */
+.modal-open {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-open .absolute.inset-0.bg-black {
+  animation: backdropFadeIn 0.3s ease-out;
+}
+
+.modal-open img[data-modal-target="image"] {
+  animation: imageZoomIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes imageZoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsividade do modal */
+@media (max-width: 768px) {
+  /* Ajusta botões de navegação em mobile */
+  button[data-modal-target="prevButton"],
+  button[data-modal-target="nextButton"] {
+    transform: translateY(-50%) translateX(0) !important;
+    position: fixed !important;
+  }
+  
+  button[data-modal-target="prevButton"] {
+    left: 1rem !important;
+  }
+  
+  button[data-modal-target="nextButton"] {
+    right: 1rem !important;
+  }
+  
+  /* Ajusta tamanho da imagem em mobile */
+  img[data-modal-target="image"] {
+    max-height: 80vh !important;
+    max-width: 95vw !important;
+  }
+}
+
+/* Suporte para temas escuros */
+@media (prefers-color-scheme: dark) {
+  .alert-box {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 
+                0 4px 6px -2px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* =========================
+   Utilitários Gerais
+   ========================= */
+
+/* Previne scroll quando modal está aberto */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Transições suaves */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Z-index hierarchy */
+.alerts-container {
+  z-index: 9999;
+}
+
+[data-controller="modal"] {
+  z-index: 9998;
+}
+
+/* Acessibilidade - Focus states */
+button:focus-visible {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Melhorias de performance - GPU acceleration */
+.alert-box,
+[data-modal-target="image"] {
+  will-change: transform, opacity;
+}
+
+/* Print styles */
+@media print {
+  .alerts-container,
+  [data-controller="modal"] {
+    display: none !important;
+  }
+}

@@ -1,0 +1,226 @@
+<main class="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+  <div class="mx-auto max-w-2xl lg:max-w-none">
+    <!-- Property -->
+    <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+      <!-- Image gallery -->
+      <div class="flex flex-col-reverse" 
+           data-controller="spotlight" 
+           data-spotlight-group-value="property-gallery"
+           data-spotlight-title-value="<%= @property.title %>">
+        
+        <% if @property.images.attached? %>
+          <!-- Hidden links for Spotlight.js gallery (for images beyond the 4 thumbnails) -->
+          <% if @property.images.count > 4 %>
+            <div class="hidden">
+              <% @property.images.offset(4).each_with_index do |image, index| %>
+                <a href="<%= url_for(image) %>" 
+                   class="spotlight"
+                   data-group="property-gallery"
+                   data-title="<%= @property.title %> - Imagem <%= index + 5 %>">
+                </a>
+              <% end %>
+            </div>
+          <% end %>
+
+          <!-- Thumbnails -->
+          <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
+            <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
+              <% @property.images.limit(4).each_with_index do |image, index| %>
+                <a href="<%= url_for(image) %>" 
+                   class="spotlight relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium text-gray-900 uppercase hover:bg-gray-50 focus:ring-3 focus:ring-indigo-500/50 focus:ring-offset-4 focus:outline-hidden image-thumb"
+                   data-image-url="<%= url_for(image) %>"
+                   data-group="property-gallery"
+                   data-title="<%= @property.title %> - Imagem <%= index + 1 %>"
+                   data-spotlight-target="thumb"
+                   data-action="click->spotlight#changeMainImage"
+                   aria-label="Ver imagem <%= index + 1 %>">
+                  <span class="absolute inset-0 overflow-hidden rounded-md">
+                    <%= image_tag image, alt: @property.title, class: "size-full object-cover" %>
+                  </span>
+                  <span class="pointer-events-none absolute inset-0 rounded-md ring-2 ring-transparent ring-offset-2 hover:ring-indigo-500" aria-hidden="true"></span>
+                  <% if index == 3 && @property.images.count > 4 %>
+                    <div class="absolute inset-0 bg-black bg-opacity-50 rounded-md flex items-center justify-center">
+                      <span class="text-white font-bold text-lg">+<%= @property.images.count - 4 %></span>
+                    </div>
+                  <% end %>
+                </a>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Main image -->
+          <div>
+            <div class="main-image-container">
+              <a href="<%= url_for(@property.images.first) %>" 
+                 class="spotlight"
+                 data-group="property-gallery"
+                 data-title="<%= @property.title %> - Imagem principal"
+                 data-spotlight-target="mainImageLink">
+                <%= image_tag @property.images.first, 
+                    alt: @property.title, 
+                    class: "aspect-square w-full object-cover sm:rounded-lg cursor-pointer main-image",
+                    id: "mainImage",
+                    data: { spotlight_target: "mainImage" } %>
+              </a>
+            </div>
+          </div>
+        <% else %>
+          <!-- Placeholder quando não há imagens -->
+          <div class="aspect-square w-full bg-gray-200 flex items-center justify-center rounded-lg">
+            <div class="text-center">
+              <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p class="mt-2 text-sm text-gray-500">Sem imagens disponíveis</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Property info -->
+      <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900"><%= @property.title %></h1>
+        
+        <% if @property.featured? %>
+          <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-sm font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20 mt-2">
+            ⭐ DESTAQUE
+          </span>
+        <% end %>
+
+        <div class="mt-3">
+          <h2 class="sr-only">Informações do imóvel</h2>
+          <p class="text-3xl tracking-tight text-gray-900">
+            <%= number_to_currency(@property.price, unit: "R$ ", separator: ",", delimiter: ".") %>
+          </p>
+        </div>
+
+        <!-- Property Type and Neighborhood -->
+        <div class="mt-3 space-y-2">
+          <% if @property.property_type.present? %>
+            <p class="text-lg text-gray-700">
+              <span class="font-medium">Tipo:</span> <%= @property.property_type %>
+            </p>
+          <% end %>
+          
+          <p class="text-lg text-gray-700">
+            <span class="font-medium">Bairro:</span> 
+            <%= link_to @property.neighborhood.name, 
+                neighborhood_path(@property.neighborhood), 
+                class: "text-indigo-600 hover:text-indigo-800" %>
+          </p>
+        </div>
+
+        <!-- Property Details -->
+        <div class="mt-6 space-y-4">
+          <% if @property.bedrooms.present? || @property.bathrooms.present? || @property.area_m2.present? || @property.garage_spaces.present? %>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <% if @property.bedrooms.present? %>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-2xl font-bold text-gray-900"><%= @property.bedrooms %></div>
+                  <div class="text-sm text-gray-600">Quartos</div>
+                </div>
+              <% end %>
+              
+              <% if @property.bathrooms.present? %>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-2xl font-bold text-gray-900"><%= @property.bathrooms %></div>
+                  <div class="text-sm text-gray-600">Banheiros</div>
+                </div>
+              <% end %>
+              
+              <% if @property.area_m2.present? %>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-2xl font-bold text-gray-900"><%= @property.area_m2.to_i %></div>
+                  <div class="text-sm text-gray-600">m²</div>
+                </div>
+              <% end %>
+              
+              <% if @property.garage_spaces.present? %>
+                <div class="text-center p-3 bg-gray-50 rounded-lg">
+                  <div class="text-2xl font-bold text-gray-900"><%= @property.garage_spaces %></div>
+                  <div class="text-sm text-gray-600">Vagas</div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          
+          <% if @property.furnished.present? %>
+            <div class="mt-4">
+              <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-sm font-medium text-green-800 ring-1 ring-inset ring-green-600/20">
+                <%= @property.furnished? ? "Mobiliado" : "Não mobiliado" %>
+              </span>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Description -->
+        <div class="mt-6">
+          <h3 class="text-lg font-medium text-gray-900">Descrição</h3>
+          <div class="prose prose-sm mt-4 text-gray-500">
+            <%= simple_format(@property.description) %>
+          </div>
+        </div>
+
+        <!-- Contact Button -->
+        <div class="mt-8">
+          <button type="button" class="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">
+            <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd" />
+            </svg>
+            Entrar em contato
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Properties -->
+    <section class="mt-16 sm:mt-24">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Outros imóveis no <%= @property.neighborhood.name %></h2>
+      
+      <% @related_properties = Property.joins(:neighborhood)
+                                      .where(neighborhood: @property.neighborhood)
+                                      .where.not(id: @property.id)
+                                      .limit(3) %>
+      
+      <% if @related_properties.any? %>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <% @related_properties.each do |property| %>
+            <div class="group relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div class="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg">
+                <% if property.images.any? %>
+                  <%= image_tag property.images.first, 
+                      alt: property.title, 
+                      class: "h-full w-full object-cover object-center group-hover:opacity-75" %>
+                <% else %>
+                  <div class="h-full w-full bg-gray-200 flex items-center justify-center">
+                    <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                <% end %>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-medium text-gray-900">
+                  <%= property.title %>
+                </h3>
+                <p class="mt-1 text-2xl font-bold text-gray-900">
+                  <%= number_to_currency(property.price, unit: "R$ ", separator: ",", delimiter: ".") %>
+                </p>
+                <p class="mt-1 text-sm text-gray-500 line-clamp-2">
+                  <%= truncate(property.description, length: 100) %>
+                </p>
+              </div>
+              <div class="mt-6">
+                <%= link_to "Ver detalhes", property_path(property), 
+                    class: "relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="mt-8 text-center py-12">
+          <p class="text-gray-500">Nenhum outro imóvel encontrado neste bairro.</p>
+        </div>
+      <% end %>
+  </div>
+</main>
