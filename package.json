@@ -6,7 +6,7 @@
     "yarn": "1.x"
   },
   "scripts": {
-    "build:css": "tailwindcss -c ./tailwind.config.js -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
     "build:js": "esbuild app/javascript/app.js --bundle --outfile=app/assets/builds/application.js --public-path=/assets",
     "build": "npm run build:css && npm run build:js",
     "start": "npm run build && rails server -b 0.0.0.0 -p 3000"

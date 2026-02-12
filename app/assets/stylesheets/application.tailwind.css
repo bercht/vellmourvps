@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@source "../../views/**/*.html.erb";
+@source "../../helpers/**/*.rb";
+@source "../../javascript/**/*.js";
+@source "../../components/**/*.{erb,rb}";
 
 /* Animações suaves para o preview de imagens */
 .image-preview-enter {
