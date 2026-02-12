@@ -1,45 +1,44 @@
-# # db/seeds.rb
-# # Dados de exemplo para o sistema imobiliário Vellmour
+puts "🌱 Iniciando seeds..."
 
-# # Limpar dados existentes (apenas em desenvolvimento)
-# if Rails.env.development?
-#   puts "🧹 Limpando dados existentes..."
-#   Property.destroy_all
-#   Neighborhood.destroy_all
-#   User.destroy_all
-# end
+# Admin opcional via ENV (seguro para produção)
+admin_email = ENV["ADMIN_EMAIL"]
+admin_password = ENV["ADMIN_PASSWORD"]
+if admin_email && admin_password
+  puts "👤 Criando usuário administrador..."
+  admin = User.find_or_create_by!(email: admin_email) do |user|
+    user.password = admin_password
+    user.password_confirmation = admin_password
+  end
+  puts "✅ Usuário criado: #{admin.email}"
+end
 
-# # Criar usuário administrador
-# puts "👤 Criando usuário administrador..."
-# admin = User.find_or_create_by(email: 'bercht@live.com') do |user|
-#   user.password = '12345678'
-#   user.password_confirmation = '12345678'
-# end
+# Evita seed de dados de exemplo em produção, a menos que explicitamente habilitado
+if Rails.env.production? && ENV["SEED_SAMPLE_DATA"] != "1"
+  puts "ℹ️  Seeds de exemplo desativados em produção (SEED_SAMPLE_DATA=1 para habilitar)"
+  exit 0
+end
 
-# puts "✅ Usuário criado: #{admin.email}"
+# Criar bairros base (se não existirem)
+puts "🏘️ Criando bairros..."
+neighborhood_names = [
+  "Centro",
+  "Copacabana",
+  "Ipanema",
+  "Leblon",
+  "Botafogo",
+  "Flamengo",
+  "Tijuca",
+  "Barra da Tijuca"
+]
 
-# # Criar bairros
-# puts "🏘️ Criando bairros..."
-# neighborhoods = [
-#   'Centro',
-#   'Copacabana',
-#   'Ipanema',
-#   'Leblon',
-#   'Botafogo',
-#   'Flamengo',
-#   'Tijuca',
-#   'Barra da Tijuca'
-# ]
+neighborhood_names.each do |name|
+  Neighborhood.find_or_create_by!(name: name)
+end
 
-# neighborhoods.each do |name|
-#   Neighborhood.find_or_create_by(name: name)
-# end
+puts "✅ #{Neighborhood.count} bairros criados"
 
-# puts "✅ #{Neighborhood.count} bairros criados"
-
-# # Criar propriedades de exemplo
-# puts "🏠 Criando propriedades de exemplo..."
-
+# Criar propriedades de exemplo
+puts "🏠 Criando propriedades de exemplo..."
 
 descriptions = [
   'Imóvel com excelente localização, próximo ao comércio e transporte público. Acabamento de primeira qualidade.',
@@ -49,8 +48,14 @@ descriptions = [
   'Propriedade única com características especiais. Não perca esta chance!'
 ]
 
+neighborhoods = Neighborhood.all
+if neighborhoods.empty?
+  puts "⚠️ Nenhum bairro encontrado. Pulando criação de propriedades."
+  exit 0
+end
+
 20.times do |i|
-  neighborhood = Neighborhood.all.sample
+  neighborhood = neighborhoods.sample
   
   property = Property.create!(
     title: "#{"Casa em"} #{i + 1} - #{neighborhood.name}",
@@ -76,13 +81,6 @@ puts "   - Usuários: #{User.count}"
 puts "   - Bairros: #{Neighborhood.count}"
 puts "   - Imóveis: #{Property.count}"
 puts "   - Imóveis em destaque: #{Property.where(featured: true).count}"
-puts ""
-puts "🔑 Login do admin:"
-puts "   Email: admin@vellmour.com"
-puts "   Senha: password123"
-puts ""
-puts "🌐 Acesse: http://localhost:3000/admin"
-
 
 
 
