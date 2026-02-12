@@ -33,22 +33,42 @@
 
 /* app/assets/stylesheets/pagy.css */
 .pagy-nav {
-  @apply flex justify-center gap-1;
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
 }
 
 .pagy-nav a,
 .pagy-nav span {
-  @apply inline-flex items-center px-3 py-2 text-sm font-medium border;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .pagy-nav a {
-  @apply text-gray-500 bg-white border-gray-300 hover:bg-gray-50 hover:text-gray-700;
+  color: #6b7280;
+  background-color: #ffffff;
+  border-color: #d1d5db;
 }
 
 .pagy-nav span.current {
-  @apply text-white bg-indigo-600 border-indigo-600;
+  color: #ffffff;
+  background-color: #4f46e5;
+  border-color: #4f46e5;
 }
 
 .pagy-nav span.gap {
-  @apply text-gray-400 bg-white border-gray-300;
+  color: #9ca3af;
+  background-color: #ffffff;
+  border-color: #d1d5db;
+}
+
+.pagy-nav a:hover {
+  background-color: #f9fafb;
+  color: #374151;
 }
