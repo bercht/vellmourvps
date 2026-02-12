@@ -26,7 +26,7 @@ RUN yarn install --check-files
 
 # Copiar todo o código e pré-compilar assets
 COPY . ./
-RUN RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 rails assets:precompile
+RUN APP_HOST=example.com RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 rails assets:precompile
 
 # Porta padrão para Rails
 EXPOSE 3000
