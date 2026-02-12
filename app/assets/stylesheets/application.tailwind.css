@@ -33,7 +33,7 @@
 
 /* app/assets/stylesheets/pagy.css */
 .pagy-nav {
-  @apply flex justify-center space-x-1;
+  @apply flex justify-center gap-1;
 }
 
 .pagy-nav a,
