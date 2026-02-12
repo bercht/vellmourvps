@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Animações suaves para o preview de imagens */
+.image-preview-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.image-preview-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.image-preview-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.image-preview-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Hover effect para as miniaturas */
+.image-preview-thumbnail:hover {
+  transform: scale(1.05);
+  transition: transform 200ms ease-in-out;
+}
+
+/* app/assets/stylesheets/pagy.css */
+.pagy-nav {
+  @apply flex justify-center space-x-1;
+}
+
+.pagy-nav a,
+.pagy-nav span {
+  @apply inline-flex items-center px-3 py-2 text-sm font-medium border;
+}
+
+.pagy-nav a {
+  @apply text-gray-500 bg-white border-gray-300 hover:bg-gray-50 hover:text-gray-700;
+}
+
+.pagy-nav span.current {
+  @apply text-white bg-indigo-600 border-indigo-600;
+}
+
+.pagy-nav span.gap {
+  @apply text-gray-400 bg-white border-gray-300;
+}
