@@ -1,1 +1,72 @@
 @import "tailwindcss";
+
+/* Animações suaves para o preview de imagens */
+.image-preview-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.image-preview-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.image-preview-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.image-preview-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Hover effect para as miniaturas */
+.image-preview-thumbnail:hover {
+  transform: scale(1.05);
+  transition: transform 200ms ease-in-out;
+}
+
+/* app/assets/stylesheets/pagy.css */
+.pagy-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.pagy-nav a,
+.pagy-nav span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.pagy-nav a {
+  color: #6b7280;
+  background-color: #ffffff;
+  border-color: #d1d5db;
+}
+
+.pagy-nav span.current {
+  color: #ffffff;
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.pagy-nav span.gap {
+  color: #9ca3af;
+  background-color: #ffffff;
+  border-color: #d1d5db;
+}
+
+.pagy-nav a:hover {
+  background-color: #f9fafb;
+  color: #374151;
+}
